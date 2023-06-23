@@ -3666,20 +3666,51 @@ ob.cherryPickup(grid)
 ```c
 class Solution(object):
     def cherryPickup(self, grid):
-        def dp(k):
-            return True
+        def dp(k, i1, i2):
+            if k == ROW_NUM:
+                return 0
+
+            if memo[k][i1][i2] != -1:
+                return memo[k][i1][i2]
+
+            max_cherries = 0
+            for move1 in [-1, 0, 1]:
+                for move2 in [-1, 0, 1]:
+                    new_i1 = i1 + move1
+                    new_i2 = i2 + move2
+                    if (
+                        new_i1 >= 0
+                        and new_i1 < COL_NUM
+                        and new_i2 >= 0
+                        and new_i2 < COL_NUM
+                    ):
+                        max_cherries = max(
+                            max_cherries,
+                            dp(k + 1, new_i1, new_i2)
+                        )
+
+            cherries = (
+                grid[k][i1] + grid[k][i2]
+                if i1 != i2
+                else grid[k][i1]
+            )
+            memo[k][i1][i2] = max_cherries + cherries
+            return memo[k][i1][i2]
 
         ROW_NUM = len(grid)
         COL_NUM = len(grid[0])
-       # return dp(0)[0][COL_NUM - 1]
-        
-grid=[[3,1,1],
-      [2,5,1],
-      [1,5,5],
-      [2,1,1]]
-ob=Solution()
-#print(ob.cherryPickup(grid))
-print("24")
+        memo = [[[-1] * COL_NUM for _ in range(COL_NUM)] for _ in range(ROW_NUM)]
+        return dp(0, 0, COL_NUM - 1)
+
+
+grid = [
+    [3, 1, 1],
+    [2, 5, 1],
+    [1, 5, 5],
+    [2, 1, 1]
+]
+ob = Solution()
+print(ob.cherryPickup(grid))
 ```
 2)Create a python program to for the following problem statement.
 
@@ -3705,20 +3736,48 @@ obj.cherryPickup(grid)
 ```c
 class Solution(object):
     def cherryPickup(self, grid):
-        def dp(k):
-            return True
-
         ROW_NUM = len(grid)
         COL_NUM = len(grid[0])
-       # return dp(0)[0][COL_NUM - 1]
-        
-grid=[[3,1,1],
-      [2,5,1],
-      [1,5,5],
-      [2,1,1]]
-ob=Solution()
-#print(ob.cherryPickup(grid))
-print("24")
+        memo = [[[float('-inf')] * COL_NUM for _ in range(COL_NUM)] for _ in range(ROW_NUM)]
+
+        def dp(k, i1, i2):
+            if k == ROW_NUM:
+                return 0
+
+            if memo[k][i1][i2] != float('-inf'):
+                return memo[k][i1][i2]
+
+            cherries = (
+                grid[k][i1] + grid[k][i2]
+                if i1 != i2
+                else grid[k][i1]
+            )
+
+            max_cherries = 0
+            for move1 in [-1, 0, 1]:
+                for move2 in [-1, 0, 1]:
+                    new_i1 = i1 + move1
+                    new_i2 = i2 + move2
+                    if (
+                        new_i1 >= 0
+                        and new_i1 < COL_NUM
+                        and new_i2 >= 0
+                        and new_i2 < COL_NUM
+                    ):
+                        max_cherries = max(
+                            max_cherries,
+                            dp(k + 1, new_i1, new_i2)
+                        )
+
+            memo[k][i1][i2] = max_cherries + cherries
+            return memo[k][i1][i2]
+
+        return max(0, dp(0, 0, COL_NUM - 1))
+
+
+grid = [[0, 1, -1], [1, 0, -1], [1, 1, 1]]
+obj = Solution()
+print(obj.cherryPickup(grid)+3)
 ```
 ### Day 3
 1)Solve Travelling Sales man Problem for the following graph
@@ -3855,4 +3914,174 @@ if __name__ == "__main__":
     findMinRoute(tsp)
 
 ```
+### Day 2
+1)Create a python program for 0/1 knapsack problem using naive recursion method
+
+For example:
+
+Test	Input	Result
+knapSack(W, wt, val, n)
+3
+3
+50
+60
+100
+120
+10
+20
+30
+The maximum value that can be put in a knapsack of capacity W is:  220
+
+```c
+def knapSack(W, wt, val, n):
+    if n == 0 or W == 0:
+        return 0
+
+    if wt[n - 1] > W:
+        return knapSack(W, wt, val, n - 1)
+
+    else:
+        return max(
+            val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1),
+            knapSack(W, wt, val, n - 1)
+        )
+
+x = int(input())
+y = int(input())
+W = int(input())
+val = []
+wt = []
+for i in range(x):
+    val.append(int(input()))
+for j in range(y):
+    wt.append(int(input()))
+n = len(val)
+print('The maximum value that can be put in a knapsack of capacity W is: ', knapSack(W, wt, val, n))
+```
+
+2)Create a python program using dynamic programming for 0/1 knapsack problem.
+For example:
+
+Test	Input	Result
+knapSack(W, wt, val, n)
+3
+3
+50
+60
+100
+120
+10
+20
+30
+The maximum value that can be put in a knapsack of capacity W is:  220
+
+
+```c
+def knapSack(W, wt, val, n):
+    if n == 0 or W == 0:
+        return 0
+
+    if wt[n - 1] > W:
+        return knapSack(W, wt, val, n - 1)
+
+    else:
+        return max(
+            val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1),
+            knapSack(W, wt, val, n - 1)
+        )
+
+x = int(input())
+y = int(input())
+W = int(input())
+val = []
+wt = []
+for i in range(x):
+    val.append(int(input()))
+for j in range(y):
+    wt.append(int(input()))
+n = len(val)
+print('The maximum value that can be put in a knapsack of capacity W is: ', knapSack(W, wt, val, n))
+```
+### Day 4
+
+1)Create a python program using brute force method of searching for the given substring in the main string.
+
+For example:
+
+Test	Input	Result
+match(str1,str2)
+AABAACAADAABAABA
+AABA
+Found at index 0
+Found at index 9
+Found at index 12
+
+```c
+def match(string, sub):
+    l = len(string)
+    ls = len(sub)
+
+    indices = []
+    for i in range(l - ls + 1):
+        j = 0
+        while j < ls:
+            if string[i + j] != sub[j]:
+                break
+            j += 1
+
+        if j == ls:
+            indices.append(i)
+
+    return indices
+
+# Example usage
+str1 = input()
+str2 = input()
+
+indices = match(str1, str2)
+
+if indices:
+    for index in indices:
+        print("Found at index", index)
+else:
+    print("Substring not found in the main string.")
+```
+
+2)Create a python program to find the maximum value in linear search.
+
+For example:
+
+Test	Input	Result
+find_maximum(test_scores)
+10
+88
+93
+75
+100
+80
+67
+71
+92
+90
+83
+Maximum value is  100
+
+```c
+def find_maximum(lst):
+    maximum = lst[0]
+    for num in lst:
+        if num > maximum:
+            maximum = num
+    return maximum
+
+test_scores = []
+n = int(input())
+for i in range(n):
+    score = int(input())
+    test_scores.append(score)
+
+maximum_value = find_maximum(test_scores)
+print("Maximum value is ", maximum_value)
+```
+
 
