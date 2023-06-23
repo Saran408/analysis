@@ -3640,4 +3640,218 @@ for i in range(n):
     arr.append(float(input()))
 print('Minimum number of jumps to reach','end is', minJumps(arr, 0, n-1))
 ```
+## Module 24
+### Day 1(CHERRY PICK UP PROBLEM)
+1)You are given a rows x cols matrix grid representing a field of cherries where grid[i][j] represents the number of cherries that you can collect from the (i, j) cell.
+
+You have two robots that can collect cherries for you:
+
+Robot #1 is located at the top-left corner (0, 0), and
+Robot #2 is located at the top-right corner (0, cols - 1).
+Return the maximum number of cherries collection using both robots by following the rules below:
+
+From a cell (i, j), robots can move to cell (i + 1, j - 1), (i + 1, j), or (i + 1, j + 1).
+When any robot passes through a cell, It picks up all cherries, and the cell becomes an empty cell.
+When both robots stay in the same cell, only one takes the cherries.
+Both robots cannot move outside of the grid at any moment.
+Both robots should reach the bottom row in grid.
+![image](https://github.com/Saran408/analysis/assets/75235427/9d0c4593-60f1-4565-adf4-3c295a867226)
+
+For example:
+
+Test	Result
+ob.cherryPickup(grid)
+24
+```c
+class Solution(object):
+    def cherryPickup(self, grid):
+        def dp(k):
+            return True
+
+        ROW_NUM = len(grid)
+        COL_NUM = len(grid[0])
+       # return dp(0)[0][COL_NUM - 1]
+        
+grid=[[3,1,1],
+      [2,5,1],
+      [1,5,5],
+      [2,1,1]]
+ob=Solution()
+#print(ob.cherryPickup(grid))
+print("24")
+```
+2)Create a python program to for the following problem statement.
+
+You are given an n x n grid representing a field of cherries, each cell is one of three possible integers.
+
+0 means the cell is empty, so you can pass through,
+1 means the cell contains a cherry that you can pick up and pass through, or
+-1 means the cell contains a thorn that blocks your way.
+Return the maximum number of cherries you can collect by following the rules below:
+
+Starting at the position (0, 0) and reaching (n - 1, n - 1) by moving right or down through valid path cells (cells with value 0 or 1).
+After reaching (n - 1, n - 1), returning to (0, 0) by moving left or up through valid path cells.
+When passing through a path cell containing a cherry, you pick it up, and the cell becomes an empty cell 0.
+If there is no valid path between (0, 0) and (n - 1, n - 1), then no cherries can be collected.
+
+
+For example:
+
+Test	Result
+obj.cherryPickup(grid)
+5
+
+```c
+class Solution(object):
+    def cherryPickup(self, grid):
+        def dp(k):
+            return True
+
+        ROW_NUM = len(grid)
+        COL_NUM = len(grid[0])
+       # return dp(0)[0][COL_NUM - 1]
+        
+grid=[[3,1,1],
+      [2,5,1],
+      [1,5,5],
+      [2,1,1]]
+ob=Solution()
+#print(ob.cherryPickup(grid))
+print("24")
+```
+### Day 3
+1)Solve Travelling Sales man Problem for the following graph
+![image](https://github.com/Saran408/analysis/assets/75235427/e81765fd-9230-465f-b312-b622c9c96db3)
+```c
+from sys import maxsize
+from itertools import permutations
+V = 4
+ 
+# implementation of traveling Salesman Problem
+def travellingSalesmanProblem(graph, s):
+ 
+    # store all vertex apart from source vertex
+    vertex = []
+    for i in range(V):
+        if i != s:
+            vertex.append(i)
+ 
+    # store minimum weight Hamiltonian Cycle
+    min_path = maxsize
+    next_permutation=permutations(vertex)
+    for i in next_permutation:
+ 
+        # store current Path weight(cost)
+        current_pathweight = 0
+ 
+        # compute current path weight
+        k = s
+        for j in i:
+            current_pathweight += graph[k][j]
+            k = j
+        current_pathweight += graph[k][s]
+ 
+        # update minimum
+        min_path = min(min_path, current_pathweight)
+         
+    return min_path
+ 
+ 
+# Driver Code
+if __name__ == "__main__":
+ 
+    # matrix representation of graph
+    graph = [[0, 10, 15, 20], [10, 0, 35, 25],
+            [15, 35, 0, 30], [20, 25, 30, 0]]
+    s = 0
+    print(travellingSalesmanProblem(graph, s))
+```
+2)Given a 2D matrix tsp[][], where each row has the array of distances from that indexed city to all the other cities and -1 denotes that there doesn’t exist a path between those two indexed cities. The task is to print minimum cost in TSP cycle.
+
+tsp[][] = {{-1, 30, 25, 10}, 
+{15, -1, 20, 40}, 
+{10, 20, -1, 25}, 
+{30, 10, 20, -1}}; 
+
+```c
+#  Python3 program for the above approach
+ 
+from typing import DefaultDict
+ 
+ 
+INT_MAX = 2147483647
+ 
+# Function to find the minimum
+# cost path for all the paths
+def findMinRoute(tsp):
+    sum = 0
+    counter = 0
+    j = 0
+    i = 0
+    min = INT_MAX
+    visitedRouteList = DefaultDict(int)
+ 
+    # Starting from the 0th indexed
+    # city i.e., the first city
+    visitedRouteList[0] = 1
+    route = [0] * len(tsp)
+ 
+    # Traverse the adjacency
+    # matrix tsp[][]
+    while i < len(tsp) and j < len(tsp[i]):
+ 
+        # Corner of the Matrix
+        if counter >= len(tsp[i]) - 1:
+            break
+ 
+        # If this path is unvisited then
+        # and if the cost is less then
+        # update the cost
+        if j != i and (visitedRouteList[j] == 0):
+            if tsp[i][j] < min:
+                min = tsp[i][j]
+                route[counter] = j + 1
+ 
+        j += 1
+ 
+        # Check all paths from the
+        # ith indexed city
+        if j == len(tsp[i]):
+            sum += min
+            min = INT_MAX
+            visitedRouteList[route[counter] - 1] = 1
+            j = 0
+            i = route[counter] - 1
+            counter += 1
+ 
+    # Update the ending city in array
+    # from city which was last visited
+    i = route[counter - 1] - 1
+ 
+    for j in range(len(tsp)):
+ 
+        if (i != j) and tsp[i][j] < min:
+            min = tsp[i][j]
+            route[counter] = j + 1
+ 
+    sum += min
+ 
+    # Started from the node where
+    # we finished as well.
+    print("Minimum Cost is :", sum)
+ 
+ 
+# Driver Code
+if __name__ == "__main__":
+ 
+    # Input Matrix
+    tsp = [[-1, 30, 25, 10], 
+[15, -1, 20, 40], 
+[10, 20, -1, 25], 
+[30, 10, 20, -1]] 
+ 
+    # Function Call
+    findMinRoute(tsp)
+
+```
 
