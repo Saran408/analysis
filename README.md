@@ -2947,3 +2947,697 @@ str2=input()
 print(edit_distance(str1,str2))
 ```
 
+## Module 23
+### Day 1
+1)Write a python program to Implement Minimum cost path using Dynamic Programming.
+
+For example:
+
+Input	Result
+3
+3
+8
+
+```c
+R = int(input())
+C = int(input())
+def minCost(cost, m, n):
+    tc = [[0 for x in range(C)] for x in range(R)]
+    tc[0][0] = cost[0][0]
+    for i in range(1, m+1):
+        tc[i][0] = tc[i-1][0] + cost[i][0]
+    for j in range(1, n+1):
+        tc[0][j] = tc[0][j-1] + cost[0][j]
+    for i in range(1, m+1):
+        for j in range(1, n+1):
+            tc[i][j] = min(tc[i-1][j-1], tc[i-1][j], tc[i][j-1]) + cost[i][j]
+ 
+    return tc[m][n]
+ 
+cost = [[1, 2, 3],
+        [4, 8, 2],
+        [1, 5, 3]]
+print(minCost(cost, R-1, C-1))
+```
+2)Write a Python program using A Naive recursive implementation of Minimum Cost Path Problem.
+
+
+For example:
+
+Input	Result
+3
+3
+8
+```c
+R = int(input())
+C = int(input())
+import sys
+def minCost(cost, m, n):
+    if (n < 0 or m < 0):
+        return sys.maxsize
+    elif (m == 0 and n == 0):
+        return cost[m][n]
+    else:
+        return cost[m][n] + min( minCost(cost, m-1, n-1),
+                                minCost(cost, m-1, n),
+                                minCost(cost, m, n-1) )
+def min(x, y, z):
+    if (x < y):
+        return x if (x < z) else z
+    else:
+        return y if (y < z) else z
+cost= [ [1, 2, 3],
+        [4, 8, 2],
+        [1, 5, 3] ]
+print(minCost(cost, R-1, C-1))
+```
+
+3)Write a Python program to Implement Minimum cost path in a Directed Graph
+
+For example:
+
+Test	Result
+getMinPathSum(graph, visited, necessary,
+                  source, dest, 0);
+12
+
+```c
+minSum = 1000000000
+def getMinPathSum(graph, visited, necessary,
+                  src, dest, currSum):
+    global minSum
+    if (src == dest):
+        flag = True;
+        for i in necessary:
+            if (not visited[i]):
+                flag = False;
+                break;
+        if (flag):
+            minSum = min(minSum, currSum);
+        return;
+     
+    else:
+        visited[src] = True;
+        for node in graph[src]:
+            if not visited[node[0]]:
+                visited[node[0]] = True;
+                getMinPathSum(graph, visited,
+                              necessary, node[0],
+                              dest, currSum + node[1]);
+                visited[node[0]] = False;
+        visited[src] = False;
+if __name__=='__main__':
+    graph=dict()
+    graph[0] = [ [ 1, 2 ], [ 2, 3 ], [ 3, 2 ] ];
+    graph[1] = [ [ 4, 4 ], [ 0, 1 ] ];
+    graph[2] = [ [ 4, 5 ], [ 5, 6 ] ];
+    graph[3] = [ [ 5, 7 ], [ 0, 1 ] ];
+    graph[4] = [ [ 6, 4 ] ];
+    graph[5] = [ [ 6, 2 ] ];
+    graph[6] = [ [ 7, 11 ] ];
+    n = 7;
+    source = 0;
+    dest = 6;
+    visited=[ False for i in range(n + 1)]
+    necessary = [ 2, 4 ];
+    getMinPathSum(graph, visited, necessary,
+                  source, dest, 0);
+  
+    # If no path is found
+    if (minSum == 1000000000):
+        print(-1)
+    else:
+        print(minSum)
+	```
+
+  4)Write a Python Program for printing Minimum Cost Simple Path between two given nodes in a directed and weighted graph
+
+
+For example:
+
+Test	Result
+minimumCostSimplePath(s, t, visited, graph)
+-3
+```c
+import sys
+V = 5
+INF = sys.maxsize
+def minimumCostSimplePath(u, destination,
+                          visited, graph):
+    if (u == destination):
+        return 0
+    visited[u] = 1
+    ans = INF
+    for i in range(V):
+        if (graph[u][i] != INF and not visited[i]):
+            curr = minimumCostSimplePath(i, destination,
+                                         visited, graph)
+            if (curr < INF):
+                ans = min(ans, graph[u][i] + curr)
+    visited[u] = 0
+    return ans
+if __name__=="__main__":
+    graph = [[INF for j in range(V)]
+                  for i in range(V)]
+    visited = [0 for i in range(V)]
+    graph[0][1] = -1
+    graph[0][3] = 1
+    graph[1][2] = -2
+    graph[2][0] = -3
+    graph[3][2] = -1
+    graph[4][3] = 2
+    s = 0
+    t = 2
+    visited[s] = 1
+    print(minimumCostSimplePath(s, t, visited, graph))
+
+### DAY -2 Coin Change Problem
+1)Create a Python Function to find the total number of distinct ways to get a change of 'target'  from an unlimited supply of coins in set 'S'.
+
+For example:
+
+Test	Input	Result
+count(S, len(S) - 1, target)
+3
+4
+1
+2
+3
+The total number of ways to get the desired change 
+
+```c
+def count(S, n, target):
+    if target == 0:
+        return 1
+    if target < 0 or n < 0:
+        return 0
+    incl = count(S, n, target - S[n])
+    excl = count(S, n - 1, target)
+    return incl + excl
+if __name__ == '__main__':
+    S = []#[1, 2, 3]
+    n=int(input())
+    target = int(input())
+    for i in range(n):
+        S.append(int(input()))
+    print('The total number of ways to get the desired change is',
+        count(S, len(S) - 1, target))
+```
+2)You are given an n x n grid representing a field of cherries, each cell is one of three possible integers.
+
+0 means the cell is empty, so you can pass through,
+1 means the cell contains a cherry that you can pick up and pass through, or
+-1 means the cell contains a thorn that blocks your way.
+Return the maximum number of cherries you can collect by following the rules below:
+
+Starting at the position (0, 0) and reaching (n - 1, n - 1) by moving right or down through valid path cells (cells with value 0 or 1).
+After reaching (n - 1, n - 1), returning to (0, 0) by moving left or up through valid path cells.
+When passing through a path cell containing a cherry, you pick it up, and the cell becomes an empty cell 0.
+If there is no valid path between (0, 0) and (n - 1, n - 1), then no cherries can be collected.
+
+For example:
+
+Test	Result
+obj.cherryPickup(grid)
+5
+
+```c
+class Solution:
+    def cherryPickup(self, grid):
+        n = len(grid)
+        dp = [[-1] * (n + 1) for _ in range(n + 1)]
+        dp[1][1] = grid[0][0]
+        for m in range(1, (n << 1) - 1):
+            for i in range(min(m, n - 1), max(-1, m - n), -1):
+                for p in range(i, max(-1, m - n), -1):
+                    j, q = m - i, m - p
+                    if grid[i][j] == -1 or grid[p][q] == -1:
+                        dp[i + 1][p + 1] = -1
+                    else:
+                        dp[i + 1][p + 1] = max(dp[i + 1][p + 1], dp[i][p + 1], dp[i + 1][p], dp[i][p])
+                        if dp[i + 1][p + 1] != -1: dp[i + 1][p + 1] += grid[i][j] + (grid[p][q] if i != p else 0)
+        return max(0, dp[-1][-1])
+        
+
+        n,m=len(grid),len(grid[0])
+        dp = [[[-1 for i in range(m)] for j1 in range(n)] for j2 in range(n)]
+
+        return f(0,0,m-1,dp)
+obj=Solution()
+grid=[[0,1,-1],[1,0,-1],[1,1,1]]        
+print(obj.cherryPickup(grid))
+```
+
+3)Create a python function to compute the fewest number of coins that we need to make up the amount given.
+
+For example:
+
+Test	Input	Result
+ob1.coinChange(s,amt)
+3
+11
+1
+2
+5
+3
+```c
+class Solution(object):
+   def coinChange(self, coins, amount):
+      if amount == 0 :
+         return 0
+      if min(coins) > amount:
+         return -1
+      dp = [-1 for i in range(0, amount + 1)]
+      for i in coins:
+         if i > len(dp) - 1:
+            continue
+         dp[i] = 1
+         for j in range(i + 1, amount + 1):
+            if dp[j - i] == -1:
+               continue
+            elif dp[j] == -1:
+               dp[j] = dp[j - i] + 1
+            else:
+               dp[j] = min(dp[j], dp[j - i] + 1)
+         #print(dp)
+      return dp[amount]
+ob1 = Solution()
+n=int(input())
+s=[]
+amt=int(input())
+for i in range(n):
+    s.append(int(input()))
+
+
+print(ob1.coinChange(s,amt))
+```
+
+4)Create a Dynamic Programming  python Implementation  of Coin Change Problem.
+
+
+
+For example:
+
+Test	Input	Result
+count(arr, m, n)
+3
+4
+1
+2
+3
+4
+```c
+def count(S, m, n):
+    table = [[0 for x in range(m)] for x in range(n+1)]
+    for i in range(m):
+        table[0][i] = 1
+    for i in range(1, n+1):
+        for j in range(m):
+ 
+            # Count of solutions including S[j]
+            x = table[i - S[j]][j] if i-S[j] >= 0 else 0
+ 
+            # Count of solutions excluding S[j]
+            y = table[i][j-1] if j >= 1 else 0
+ 
+            # total count
+            table[i][j] = x + y
+ 
+    return table[n][m-1]
+ 
+arr = []      
+m = int(input())
+n = int(input())
+for i in range(m):
+    arr.append(int(input()))
+print(count(arr, m, n))
+```
+
+### Day 3
+
+1)Write a python program to find the maximum contiguous subarray.
+
+
+
+For example:
+
+Test	Input	Result
+maxSubArraySum(a,n)
+8
+-2
+-3
+4
+-1
+-2
+1
+5
+-3
+Maximum contiguous sum is 7
+
+```c
+def maxSubArraySum(a,size):
+    max_so_far = a[0]
+    max_ending_here = 0
+    for i in range(0, size):
+        max_ending_here = max_ending_here + a[i]
+        if max_ending_here < 0:
+            max_ending_here = 0
+        elif (max_so_far < max_ending_here):
+            max_so_far = max_ending_here
+              
+    return max_so_far
+n=int(input())  
+a =[] #[-2, -3, 4, -1, -2, 1, 5, -3]
+for i in range(n):
+    a.append(int(input()))
+  
+print("Maximum contiguous sum is", maxSubArraySum(a,n))
+```
+2)Create a python Program to find the maximum contiguous  sub array using Dynamic Programming.
+
+For example:
+
+Test	Input	Result
+maxSubArraySum(a,len(a))
+8
+-2
+-3
+4
+-1
+-2
+1
+5
+-3
+Maximum contiguous sum is 7
+
+```c
+def maxSubArraySum(a,size):
+      
+    max_so_far =a[0]
+    curr_max = a[0]
+      
+    for i in range(1,size):
+        curr_max = max(a[i], curr_max + a[i])
+        max_so_far = max(max_so_far,curr_max)
+          
+    return max_so_far
+
+n=int(input())  
+a =[] #[-2, -3, 4, -1, -2, 1, 5, -3]
+for i in range(n):
+    a.append(int(input()))
+  
+print("Maximum contiguous sum is", maxSubArraySum(a,n))
+```
+
+3)Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+A subarray is a contiguous part of an array.
+
+Example 1:
+
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+
+For example:
+
+Test	Input	Result
+s.maxSubArray(A)
+9
+-2
+1
+-3
+4
+-1
+2
+1
+-5
+4
+The sum of contiguous sublist with the largest sum is 6
+
+```c
+class Solution:
+    def maxSubArray(self,A):
+        res=0
+        mm= -10000
+        for v in A:
+            res+=v
+            mm=max(mm,res)
+            if res<0:
+                res=0
+        return mm
+        
+A =[]                  #[-2, 1, -3, 4, -1, 2, 1, -5, 4]
+n=int(input())
+for i in range(n):
+    A.append(int(input()))
+s=Solution()
+print("The sum of contiguous sublist with the largest sum is",s.maxSubArray(A))
+ ```
+4)Write a python program to find the maximum contiguous subarray on the given float array using kadane's algorithm.
+
+
+
+For example:
+
+Test	Input	Result
+s.maxSubArray(A)
+5
+-9.6
+-3.5
+6.3
+8.31
+9.2
+The sum of contiguous sublist with the largest sum is 23.8
+
+```c
+class Solution:
+    def maxSubArray(self,A):
+        res=0
+        mm= -10000
+        for v in A:
+            res+=v
+            mm=max(mm,res)
+            if res<0:
+                res=0
+        return mm
+        
+A =[]                  
+n=int(input())
+for i in range(n):
+    A.append(float(input()))
+s=Solution()
+print("The sum of contiguous sublist with the largest sum is {:.1f}".format(s.maxSubArray(A)))
+ ```
+
+### DAY -4 Minimum Jump to Reach End Array
+1)Create a python program to find Minimum number of jumps to reach end  of the array using naive method(recursion)
+
+For example:
+
+Test	Input	Result
+minJumps(arr, 0, n-1)
+10
+1
+3
+6
+3
+2
+3
+6
+8
+9
+5
+Minimum number of jumps to reach end is 4
+
+```c
+def minJumps(arr, l, h):
+    if (h == l):
+        return 0
+    if (arr[l] == 0):
+        return float('inf')
+    min = float('inf')
+    for i in range(l + 1, h + 1):
+        if (i < l + arr[l] + 1):
+            jumps = minJumps(arr, i, h)
+            if (jumps != float('inf') and
+                       jumps + 1 < min):
+                min = jumps + 1
+ 
+    return min
+arr = []#[1, 3, 6, 3, 2, 3, 6, 8, 9, 5]
+n = int(input()) #len(arr)
+for i in range(n):
+    arr.append(int(input()))
+print('Minimum number of jumps to reach','end is', minJumps(arr, 0, n-1))
+ ```
+2)Create a python program to find the minimum number of jumps needed to reach end of the array using Dynamic Programming.
+
+For example:
+
+Test	Input	Result
+minJumps(arr,n)
+6
+1
+3
+6
+1
+0
+9
+Minimum number of jumps to reach end is 3
+
+```c
+def minJumps(arr, n):
+    jumps = [0 for i in range(n)]
+ 
+    if (n == 0) or (arr[0] == 0):
+        return float('inf')
+ 
+    jumps[0] = 0
+    for i in range(1, n):
+        jumps[i] = float('inf')
+        for j in range(i):
+            if (i <= j + arr[j]) and (jumps[j] != float('inf')):
+                jumps[i] = min(jumps[i], jumps[j] + 1)
+                break
+    return jumps[n-1]
+arr = []
+n = int(input()) #len(arr)
+for i in range(n):
+    arr.append(int(input()))
+print('Minimum number of jumps to reach','end is', minJumps(arr,n))
+```
+3)Print All Paths With Minimum Jumps
+
+1. You are given a number N representing number of elements.
+2. You are given N space separated numbers (ELE : elements).
+3. Your task is to find & print  
+    3.1) "MINIMUM JUMPS" need from 0th step to (n-1)th step.
+    3.2) all configurations of "MINIMUM JUMPS".
+NOTE: Checkout sample question/solution video inorder to have more insight.
+
+For example:
+
+Test	Input	Result
+minJumps(arr)
+10
+3
+3
+0
+2
+1
+2
+4
+2
+0
+0
+0 -> 3 -> 5 -> 6 -> 9
+0 -> 3 -> 5 -> 7 -> 9
+
+```c
+from queue import Queue
+import sys
+class Pair(object):
+    idx = 0
+    psf = ""
+    jmps = 0
+    def __init__(self, idx, psf, jmps):
+         
+        self.idx = idx
+        self.psf = psf
+        self.jmps = jmps
+def minJumps(arr):
+    MAX_VALUE = sys.maxsize
+    dp = [MAX_VALUE for i in range(len(arr))]
+    n = len(dp)
+    dp[n - 1] = 0
+ 
+    for i in range(n - 2, -1, -1):
+        steps = arr[i]
+        minimum = MAX_VALUE
+ 
+        for j in range(1, steps + 1, 1):
+            if i + j >= n:
+                break
+            if ((dp[i + j] != MAX_VALUE) and
+                (dp[i + j] < minimum)):
+                minimum = dp[i + j]
+ 
+        if minimum != MAX_VALUE:
+            dp[i] = minimum + 1
+             
+    return dp
+def possiblePath(arr, dp):
+ 
+    queue = Queue(maxsize = 0)
+    p1 = Pair(0, "0", dp[0])
+    queue.put(p1)
+ 
+    while queue.qsize() > 0:
+        tmp = queue.get()
+ 
+        if tmp.jmps == 0:
+            print(tmp.psf)
+            continue
+ 
+        for step in range(1, arr[tmp.idx] + 1, 1):
+            if ((tmp.idx + step < len(arr)) and
+               (tmp.jmps - 1 == dp[tmp.idx + step])):
+               
+                # Storing the neighbours
+                # of current index element
+                p2 = Pair(tmp.idx + step, tmp.psf +
+                           " -> " + str((tmp.idx + step)),
+                         tmp.jmps - 1)
+                          
+                queue.put(p2)
+def Solution(arr):
+    dp = minJumps(arr)
+    possiblePath(arr, dp)
+    
+if __name__ == "__main__":
+     
+    arr = []#[ 3, 3, 0, 2, 1,2, 4, 2, 0, 0 ]
+    size = int(input())
+    for i in range(size):
+        arr.append(int(input()))
+    Solution(arr)
+```
+4)Create a python program to find Minimum number of jumps to reach end  of the array using naive method(recursion) using float values
+
+For example:
+
+Test	Input	Result
+minJumps(arr, 0, n-1)
+6
+2.3
+7.4
+6.3
+1.5
+8.2
+0.1
+Minimum number of jumps to reach end is 2
+
+```c
+def minJumps(arr, l, h):
+    if (h == l):
+        return 0
+    if (arr[l] == 0):
+        return float('inf')
+    min = float('inf')
+    for i in range(l + 1, h + 1):
+        if (i < l + arr[l] + 1):
+            jumps = minJumps(arr, i, h)
+            if (jumps != float('inf') and
+                       jumps + 1 < min):
+                min = jumps + 1
+ 
+    return min
+arr = []
+n = int(input())
+for i in range(n):
+    arr.append(float(input()))
+print('Minimum number of jumps to reach','end is', minJumps(arr, 0, n-1))
+```
+
