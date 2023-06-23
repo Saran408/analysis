@@ -863,7 +863,8 @@ else:
 1)Rat In A Maze Problem
 You are given a maze in the form of a matrix of size n * n. Each cell is either clear or blocked denoted by 1 and 0 respectively. A rat sits at the top-left cell and there exists a block of cheese at the bottom-right cell. Both these cells are guaranteed to be clear. You need to find if the rat can get the cheese if it can move only in one of the two directions - down and right. It can’t move to blocked cells.
 
-                      ![image](https://github.com/Saran408/analysis/assets/75235427/edfc26e1-bd28-407e-ad20-9dbb204011e3)
+
+![image](https://github.com/Saran408/analysis/assets/75235427/edfc26e1-bd28-407e-ad20-9dbb204011e3)
                     
 
 Provide the solution for the above problem(Consider n=4)
